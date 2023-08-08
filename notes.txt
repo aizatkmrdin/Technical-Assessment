@@ -1,0 +1,7 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+if (kIsWeb) {
+  // running on the web!
+} else {
+  // NOT running on the web! You can check for additional platforms here.
+}
