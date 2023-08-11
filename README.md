@@ -36,13 +36,13 @@ flutter run -d chrome
 
 For android, execute the following command:
 
-````
+```
 flutter run
 ```
 
 or can build the apk
 
-````
+```
 
 flutter build apk --release
 
@@ -172,5 +172,3 @@ widgets/
 ## Conclusion
 
 I will be happy to answer any questions that you may have on this approach 🙂
-
-```
