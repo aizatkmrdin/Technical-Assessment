@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 part 'todo.g.dart';
 
+//Hive
 @HiveType(typeId: 0)
 class ToDo extends HiveObject {
   @HiveField(0)

@@ -5,7 +5,6 @@ import 'package:assessment/utilities/db_container.dart';
 import 'package:assessment/widgets/todo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,8 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: primaryColor,
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const ToDoFormScreens()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ToDoFormScreen(
+                          isUpdate: false,
+                        )));
           },
           child: const Icon(
             Icons.add,
@@ -51,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: AppBar().preferredSize.height,
                     ),
+                    //Greeting Widget
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -97,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 30,
                     ),
+                    //Get new value in list if has changes
                     ValueListenableBuilder<Box<ToDo>>(
                         valueListenable: DBContainer.getTodo().listenable(),
                         builder: (context, box, _) {
@@ -107,13 +112,26 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: GoogleFonts.montserrat(fontSize: 18),
                             );
                           } else {
-                            print(listOfToDo[1].title);
                             return Column(
                               children: [
                                 ...List.generate(
                                   listOfToDo.length,
-                                  (index) => ToDoCard(
-                                    status: listOfToDo[index].isCompleted,
+                                  (index) => InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => ToDoFormScreen(
+                                                    isUpdate: true,
+                                                    todo: listOfToDo[index],
+                                                  )));
+                                    },
+                                    child: ToDoCard(
+                                      status: listOfToDo[index].isCompleted,
+                                      title: listOfToDo[index].title,
+                                      startDate: listOfToDo[index].startDate,
+                                      endDate: listOfToDo[index].endDate,
+                                    ),
                                   ),
                                 )
                               ],
@@ -125,21 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
-        )
-
-        //  ValueListenableBuilder<Box<ToDo>>(
-        //     valueListenable: DBContainer.getTodo().listenable(),
-        //     builder: (context, box, _) {
-        //       final listOfToDo = box.values.toList().cast<ToDo>();
-        //       debugPrint(listOfToDo.length.toString());
-        //       // debugPrint(listOfToDo[listOfToDo.length - 1].title);
-        //       if (listOfToDo.isEmpty) {
-        //         return Text('The List is Empty');
-        //       } else {
-        //         return Text(' asd');
-        //       }
-        //     })
-
-        );
+        ));
   }
 }

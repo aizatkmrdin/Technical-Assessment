@@ -1,17 +1,26 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:assessment/constants/date.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 
 class ToDoCard extends StatelessWidget {
   ToDoCard({
     required this.status,
+    required this.title,
+    required this.startDate,
+    required this.endDate,
     super.key,
   });
 
   bool status;
+  String title;
+  DateTime startDate;
+  DateTime endDate;
 
   @override
   Widget build(BuildContext context) {
+    dynamic timeLeft = endDate.difference(startDate);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4),
       child: Column(
@@ -50,7 +59,7 @@ class ToDoCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                "sdasd", //
+                                title,
                                 style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     textStyle: const TextStyle(
@@ -58,26 +67,11 @@ class ToDoCard extends StatelessWidget {
                                         fontWeight: FontWeight.w600)),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'adsasdasdasdsa',
-                                    style: GoogleFonts.poppins(
-                                        textStyle: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.red)),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                         Flexible(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 mainAxisAlignment:
@@ -90,9 +84,82 @@ class ToDoCard extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'asd',
+                                          'Start Date',
                                           style: GoogleFonts.poppins(
                                               color: Colors.grey,
+                                              textStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500)),
+                                        ),
+                                        Text(
+                                          cardDisplayDateFormat
+                                              .format(startDate),
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.black,
+                                              textStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'End Date',
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.grey,
+                                              textStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500)),
+                                        ),
+                                        Text(
+                                          cardDisplayDateFormat.format(endDate),
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.black,
+                                              textStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Time Left',
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.grey,
+                                              textStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500)),
+                                        ),
+                                        Text(
+                                          status
+                                              ? '-'
+                                              : printDuration(timeLeft),
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.black,
                                               textStyle: const TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500)),
@@ -112,9 +179,9 @@ class ToDoCard extends StatelessWidget {
                 Container(
                   height: MediaQuery.of(context).size.height * .06,
                   width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: status ? Colors.green : Colors.red,
+                    borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),
                   ),
@@ -130,7 +197,8 @@ class ToDoCard extends StatelessWidget {
                                 textStyle: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600)),
                           ),
-                          if (status) const Icon(Icons.done)
+                          if (status)
+                            const Icon(Icons.done, color: Colors.white)
                         ]),
                   ),
                 ),
@@ -140,5 +208,11 @@ class ToDoCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    return "${twoDigits(duration.inHours)} hrs $twoDigitMinutes min";
   }
 }

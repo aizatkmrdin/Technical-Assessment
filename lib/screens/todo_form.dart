@@ -1,4 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:assessment/constants/color.dart';
+import 'package:assessment/constants/date.dart';
+import 'package:assessment/models/todo.dart';
 import 'package:assessment/utilities/servicers.dart';
 import 'package:assessment/widgets/custom_button.dart';
 import 'package:assessment/widgets/fill_form.dart';
@@ -8,22 +12,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
-class ToDoFormScreens extends StatefulWidget {
-  const ToDoFormScreens({super.key});
+class ToDoFormScreen extends StatefulWidget {
+  ToDoFormScreen({required this.isUpdate, this.todo, super.key});
 
+  bool isUpdate;
+  ToDo? todo;
   @override
-  State<ToDoFormScreens> createState() => _ToDoFormScreensState();
+  State<ToDoFormScreen> createState() => _ToDoFormScreenState();
 }
 
-class _ToDoFormScreensState extends State<ToDoFormScreens> {
+class _ToDoFormScreenState extends State<ToDoFormScreen> {
+  bool isCompleted = false;
   final todoTitleController = TextEditingController();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.isUpdate) getToDoValue(widget.todo!);
+    super.initState();
+  }
+
+  //Get todo list if its a update form
+  getToDoValue(ToDo todo) {
+    setState(() {
+      todoTitleController.text = todo.title;
+      startDateController.text = cardDisplayDateFormat.format(todo.startDate);
+      endDateController.text = cardDisplayDateFormat.format(todo.endDate);
+      isCompleted = todo.isCompleted;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Material App Bar'),
+        title:
+            Text(widget.isUpdate ? 'Update To-Do List' : 'Add New To-Do List'),
         backgroundColor: primaryColor,
         elevation: 0,
       ),
@@ -90,16 +115,10 @@ class _ToDoFormScreensState extends State<ToDoFormScreens> {
                                 dialogBackgroundColor: Colors.white,
                               );
                               if (values != null) {
-                                setState(
-                                  () {
-                                    setState(() {
-                                      startDateController.text = getValueText(
-                                        calendarConfig.calendarType,
-                                        values,
-                                      );
-                                    });
-                                  },
-                                );
+                                setState(() {
+                                  startDateController.text =
+                                      cardDisplayDateFormat.format(values[0]!);
+                                });
                               }
                             },
                             child: FillForm(
@@ -108,26 +127,25 @@ class _ToDoFormScreensState extends State<ToDoFormScreens> {
                               controller: startDateController,
                             ),
                           ),
-                          startDateController.text.isNotEmpty
-                              ? Positioned.fill(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            setState(
-                                              () => startDateController.clear(),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Iconsax.close_square,
-                                            color: Colors.black,
-                                          ),
-                                        )),
-                                  ),
-                                )
-                              : Container()
+                          if (startDateController.text.isNotEmpty)
+                            Positioned.fill(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(
+                                          () => startDateController.clear(),
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Iconsax.close_square,
+                                        color: Colors.black,
+                                      ),
+                                    )),
+                              ),
+                            )
                         ],
                       ),
                     ],
@@ -164,16 +182,10 @@ class _ToDoFormScreensState extends State<ToDoFormScreens> {
                                 dialogBackgroundColor: Colors.white,
                               );
                               if (values != null) {
-                                setState(
-                                  () {
-                                    setState(() {
-                                      endDateController.text = getValueText(
-                                        calendarConfig.calendarType,
-                                        values,
-                                      );
-                                    });
-                                  },
-                                );
+                                setState(() {
+                                  endDateController.text =
+                                      cardDisplayDateFormat.format(values[0]!);
+                                });
                               }
                             },
                             child: FillForm(
@@ -182,30 +194,45 @@ class _ToDoFormScreensState extends State<ToDoFormScreens> {
                               controller: endDateController,
                             ),
                           ),
-                          endDateController.text.isNotEmpty
-                              ? Positioned.fill(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            setState(
-                                              () => endDateController.clear(),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Iconsax.close_square,
-                                            color: Colors.black,
-                                          ),
-                                        )),
-                                  ),
-                                )
-                              : Container()
+                          if (endDateController.text.isNotEmpty)
+                            Positioned.fill(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(
+                                          () => endDateController.clear(),
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Iconsax.close_square,
+                                        color: Colors.black,
+                                      ),
+                                    )),
+                              ),
+                            )
                         ],
                       ),
                     ],
                   ),
+                ),
+                CheckboxListTile(
+                  fillColor: MaterialStateProperty.all<Color>(primaryColor),
+                  title: Text(
+                    "Completed ?",
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                  value: isCompleted,
+                  onChanged: (newValue) {
+                    setState(() {
+                      isCompleted = newValue!;
+                    });
+                  },
+                  controlAffinity:
+                      ListTileControlAffinity.leading, //  <-- leading Checkbox
                 ),
               ],
             ),
@@ -215,14 +242,41 @@ class _ToDoFormScreensState extends State<ToDoFormScreens> {
               width: MediaQuery.of(context).size.width,
               child: InkWell(
                   onTap: () {
-                    addTodo(
-                      todoTitleController.text,
-                      DateFormat("yyyy-MM-dd").parse(startDateController.text),
-                      DateFormat("yyyy-MM-dd").parse(endDateController.text),
-                    );
-                    Navigator.pop(context);
+                    if (todoTitleController.text.isEmpty ||
+                        startDateController.text.isEmpty ||
+                        endDateController.text.isEmpty) {
+                      showInSnackBarFail('Please Complete To-Do Form', context);
+                    } else {
+                      if (widget.isUpdate) {
+                        //Update todo details to database
+                        updateTodo(
+                            widget.todo!,
+                            todoTitleController.text,
+                            DateFormat('dd MMM yyyy')
+                                .parse(startDateController.text),
+                            DateFormat('dd MMM yyyy')
+                                .parse(endDateController.text),
+                            isCompleted);
+                        showInSnackBarSuccess(
+                            'Successfully Update To-Do List', context);
+                        Navigator.pop(context);
+                      } else {
+                        //Add todo details to database
+                        addTodo(
+                          todoTitleController.text,
+                          DateFormat('dd MMM yyyy')
+                              .parse(startDateController.text),
+                          DateFormat('dd MMM yyyy')
+                              .parse(endDateController.text),
+                        );
+                        showInSnackBarSuccess(
+                            'Successfully Add New To-Do List', context);
+                        Navigator.pop(context);
+                      }
+                    }
                   },
-                  child: CustomButton(title: 'Create Now')))
+                  child: CustomButton(
+                      title: widget.isUpdate ? 'Update Now' : 'Create Now')))
         ],
       ),
     );

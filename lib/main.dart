@@ -6,8 +6,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //initialize Hive datbase
   await Hive.initFlutter();
   Hive.registerAdapter(ToDoAdapter());
+  //Open todo database
   await Hive.openBox<ToDo>('todo');
   runApp(const MyApp());
 }
@@ -15,13 +17,12 @@ Future main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return const MaterialApp(
+      title: 'Assessment',
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }

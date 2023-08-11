@@ -16,6 +16,15 @@ addTodo(String title, DateTime startDate, DateTime endDate) {
   box.add(todo);
 }
 
+updateTodo(ToDo todo, String title, DateTime startDate, DateTime endDate,
+    bool status) {
+  todo.title = title;
+  todo.startDate = startDate;
+  todo.endDate = endDate;
+  todo.isCompleted = status;
+  todo.save();
+}
+
 int year = int.parse(DateFormat('yyyy').format(DateTime.now()));
 int month = int.parse(DateFormat('MM').format(DateTime.now()));
 int day = int.parse(DateFormat('dd').format(DateTime.now()));
@@ -91,31 +100,65 @@ final calendarConfig = CalendarDatePicker2WithActionButtonsConfig(
       return dayWidget;
     });
 
-getValueText(
-  CalendarDatePicker2Type datePickerType,
-  List<DateTime?> values,
-) {
-  var valueText = (values.isNotEmpty ? values[0] : null)
-      .toString()
-      .replaceAll('00:00:00.000', '');
+showInSnackBarSuccess(String value, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: Colors.black,
+    content: Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Container(
+            width: 21,
+            height: 21,
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.green),
+            child: const Icon(
+              Icons.done,
+              size: 18,
+            ),
+          ),
+        ),
+        Flexible(
+          child: Text(
+            maxLines: 6,
+            value,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    ),
+    behavior: SnackBarBehavior.floating,
+    margin: const EdgeInsets.all(30.0),
+  ));
+}
 
-  if (datePickerType == CalendarDatePicker2Type.multi) {
-    valueText = values.isNotEmpty
-        ? values
-            .map((v) => v.toString().replaceAll('00:00:00.000', ''))
-            .join(', ')
-        : 'null';
-  } else if (datePickerType == CalendarDatePicker2Type.range) {
-    if (values.isNotEmpty) {
-      final startDate = values[0].toString().replaceAll('00:00:00.000', '');
-      // final endDate = values.length > 1
-      //     ? values[1].toString().replaceAll('00:00:00.000', '')
-      //     : 'null';
-      valueText = startDate;
-    } else {
-      return 'null';
-    }
-  }
-
-  return valueText;
+showInSnackBarFail(String value, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: Colors.black,
+    content: Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Container(
+            width: 21,
+            height: 21,
+            decoration:
+                const BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+            child: const Icon(
+              Icons.close,
+              size: 18,
+            ),
+          ),
+        ),
+        Flexible(
+          child: Text(
+            value,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    ),
+    behavior: SnackBarBehavior.floating,
+    margin: const EdgeInsets.all(30.0),
+  ));
 }
