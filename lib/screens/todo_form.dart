@@ -218,22 +218,23 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                     ],
                   ),
                 ),
-                CheckboxListTile(
-                  fillColor: MaterialStateProperty.all<Color>(primaryColor),
-                  title: Text(
-                    "Completed ?",
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w500, fontSize: 16),
+                if (widget.todo != null)
+                  CheckboxListTile(
+                    fillColor: MaterialStateProperty.all<Color>(primaryColor),
+                    title: Text(
+                      "Completed ?",
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500, fontSize: 16),
+                    ),
+                    value: isCompleted,
+                    onChanged: (newValue) {
+                      setState(() {
+                        isCompleted = newValue!;
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
                   ),
-                  value: isCompleted,
-                  onChanged: (newValue) {
-                    setState(() {
-                      isCompleted = newValue!;
-                    });
-                  },
-                  controlAffinity:
-                      ListTileControlAffinity.leading, //  <-- leading Checkbox
-                ),
               ],
             ),
           ),
