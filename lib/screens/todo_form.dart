@@ -47,8 +47,15 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.isUpdate ? 'Update To-Do List' : 'Add New To-Do List'),
+        iconTheme: const IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        title: Text(
+          widget.isUpdate ? 'Update To-Do List' : 'Add New To-Do List',
+          style: GoogleFonts.montserrat(
+            color: Colors.black,
+          ),
+        ),
         backgroundColor: primaryColor,
         elevation: 0,
       ),
@@ -70,10 +77,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                           'To-Do Title',
                           textAlign: TextAlign.left,
                           style: GoogleFonts.poppins(
-                            textStyle: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500),
+                            textStyle: const TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
@@ -95,10 +99,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                           'Start Date',
                           textAlign: TextAlign.left,
                           style: GoogleFonts.poppins(
-                            textStyle: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500),
+                            textStyle: const TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
@@ -106,8 +107,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              final values =
-                                  await showCalendarDatePicker2Dialog(
+                              final values = await showCalendarDatePicker2Dialog(
                                 context: context,
                                 config: calendarConfig,
                                 dialogSize: const Size(325, 400),
@@ -116,8 +116,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                               );
                               if (values != null) {
                                 setState(() {
-                                  startDateController.text =
-                                      cardDisplayDateFormat.format(values[0]!);
+                                  startDateController.text = cardDisplayDateFormat.format(values[0]!);
                                 });
                               }
                             },
@@ -162,10 +161,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                           'End Date',
                           textAlign: TextAlign.left,
                           style: GoogleFonts.poppins(
-                            textStyle: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500),
+                            textStyle: const TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
@@ -173,8 +169,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              final values =
-                                  await showCalendarDatePicker2Dialog(
+                              final values = await showCalendarDatePicker2Dialog(
                                 context: context,
                                 config: calendarConfig,
                                 dialogSize: const Size(325, 400),
@@ -183,8 +178,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                               );
                               if (values != null) {
                                 setState(() {
-                                  endDateController.text =
-                                      cardDisplayDateFormat.format(values[0]!);
+                                  endDateController.text = cardDisplayDateFormat.format(values[0]!);
                                 });
                               }
                             },
@@ -223,8 +217,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                     fillColor: MaterialStateProperty.all<Color>(primaryColor),
                     title: Text(
                       "Completed ?",
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500, fontSize: 16),
+                      style: GoogleFonts.montserrat(fontWeight: FontWeight.w500, fontSize: 16),
                     ),
                     value: isCompleted,
                     onChanged: (newValue) {
@@ -232,8 +225,7 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
                         isCompleted = newValue!;
                       });
                     },
-                    controlAffinity: ListTileControlAffinity
-                        .leading, //  <-- leading Checkbox
+                    controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
                   ),
               ],
             ),
@@ -243,41 +235,28 @@ class _ToDoFormScreenState extends State<ToDoFormScreen> {
               width: MediaQuery.of(context).size.width,
               child: InkWell(
                   onTap: () {
-                    if (todoTitleController.text.isEmpty ||
-                        startDateController.text.isEmpty ||
-                        endDateController.text.isEmpty) {
+                    if (todoTitleController.text.isEmpty || startDateController.text.isEmpty || endDateController.text.isEmpty) {
                       showInSnackBarFail('Please Complete To-Do Form', context);
                     } else {
                       if (widget.isUpdate) {
                         //Update todo details to database
-                        updateTodo(
-                            widget.todo!,
-                            todoTitleController.text,
-                            DateFormat('dd MMM yyyy')
-                                .parse(startDateController.text),
-                            DateFormat('dd MMM yyyy')
-                                .parse(endDateController.text),
-                            isCompleted);
-                        showInSnackBarSuccess(
-                            'Successfully Update To-Do List', context);
+                        updateTodo(widget.todo!, todoTitleController.text, DateFormat('dd MMM yyyy').parse(startDateController.text),
+                            DateFormat('dd MMM yyyy').parse(endDateController.text), isCompleted);
+                        showInSnackBarSuccess('Successfully Update To-Do List', context);
                         Navigator.pop(context);
                       } else {
                         //Add todo details to database
                         addTodo(
                           todoTitleController.text,
-                          DateFormat('dd MMM yyyy')
-                              .parse(startDateController.text),
-                          DateFormat('dd MMM yyyy')
-                              .parse(endDateController.text),
+                          DateFormat('dd MMM yyyy').parse(startDateController.text),
+                          DateFormat('dd MMM yyyy').parse(endDateController.text),
                         );
-                        showInSnackBarSuccess(
-                            'Successfully Add New To-Do List', context);
+                        showInSnackBarSuccess('Successfully Add New To-Do List', context);
                         Navigator.pop(context);
                       }
                     }
                   },
-                  child: CustomButton(
-                      title: widget.isUpdate ? 'Update Now' : 'Create Now')))
+                  child: CustomButton(title: widget.isUpdate ? 'Update Now' : 'Create Now')))
         ],
       ),
     );
