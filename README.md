@@ -169,6 +169,17 @@ widgets/
 
 ```
 
+### Test
+
+Here is the folder structure for widget test
+
+```
+
+test/
+|- widget_test.dart
+
+```
+
 ## Conclusion
 
 I will be happy to answer any questions that you may have on this approach 🙂

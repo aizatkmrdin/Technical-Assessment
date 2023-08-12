@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
+          key: const Key('addButton'),
           backgroundColor: primaryColor,
           onPressed: () {
             Navigator.push(
@@ -63,18 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text(
                               'Welcome back to your 👋',
-                              style: GoogleFonts.montserrat(
-                                  color: Colors.black87,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w400),
+                              style: GoogleFonts.montserrat(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w400),
                             ),
                             Text(
                               'ToDo List',
-                              style: GoogleFonts.montserrat(
-                                  color: Colors.black,
-                                  fontSize: 32,
-                                  letterSpacing: -1,
-                                  fontWeight: FontWeight.w500),
+                              style: GoogleFonts.montserrat(color: Colors.black, fontSize: 32, letterSpacing: -1, fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
@@ -82,16 +76,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {},
                           child: Container(
                             padding: const EdgeInsets.all(2), // Border width
-                            decoration: BoxDecoration(
-                                color: const Color(0xFF102038),
-                                borderRadius: BorderRadius.circular(14)),
+                            decoration: BoxDecoration(color: const Color(0xFF102038), borderRadius: BorderRadius.circular(14)),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(14),
                               child: SizedBox.fromSize(
                                 size: const Size.fromRadius(24), // Image radius
-                                child: Image.network(
-                                    'https://icon-library.com/images/no-user-image-icon/no-user-image-icon-3.jpg',
-                                    fit: BoxFit.cover),
+                                child:
+                                    Image.network('https://icon-library.com/images/no-user-image-icon/no-user-image-icon-3.jpg', fit: BoxFit.cover),
                               ),
                             ),
                           ),
